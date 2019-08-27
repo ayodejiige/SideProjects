@@ -5,7 +5,7 @@ import json
 class LocationParser(object):
     def __init__(self):
         pass
-    
+
     @classmethod
     def parse(cls, json_object):
         leg = json_object['legs'][0]
@@ -22,7 +22,7 @@ class LocationParser(object):
 class LocationParser(object):
     def __init__(self):
         pass
-    
+
     @classmethod
     def parse(cls, json_object):
         leg = json_object['legs'][0]
@@ -44,18 +44,17 @@ class CommuteModes:
     N_MODES = 4
 
 @dataclass
-class CommuteReport: 
+class CommuteReport:
     dist_in_km: float
     time_in_minutes: float
     mode: str = ""
     # path: dict = {}
 
 class CommuteTracker(object):
-    _API_KEY = json.load(open("apikey.json"))["key"]
-    
-    def __init__(self):
-        self._gmaps = googlemaps.Client(key=self._API_KEY)
-    
+    def __init__(self, api_key):
+        self._api_key = api_key
+        self._gmaps = googlemaps.Client(key=self._api_key)
+
     def get_commute(self, src, dest, mode, departure_time):
         result = self._gmaps.directions(
             src,
@@ -81,7 +80,7 @@ class CommuteTracker(object):
 
 def main():
     from datetime import datetime
-    
+
     tracker = CommuteTracker()
     src = "1075 Jervis St, Vancouver, BC"
     dest = "725 Granville St, Vancouver, BC"

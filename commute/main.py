@@ -1,5 +1,6 @@
 from datetime import datetime
 from commute import CommuteModes, CommuteTracker, CommuteReport
+from config_handler import Config
 import json
 
 
@@ -15,14 +16,17 @@ class SheetColumns(object):
     COLS = [DRIVE_COL, TRANSIT_COL, BIKING_COL, WALKING_COL]
 
 def main():
+
+    config = Config("config.json")
+
     #  Open google sheet
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
     client = gspread.authorize(creds)
-    wks = client.open("Vancouver Move").sheet1
+    wks = client.open(config.sheet_name).sheet1
 
 
-    tracker = CommuteTracker()
+    tracker = CommuteTracker(config.api_key)
 
     values_list = wks.col_values(2)
 
